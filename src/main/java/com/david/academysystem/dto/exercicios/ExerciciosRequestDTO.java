@@ -1,4 +1,11 @@
-package com.david.academysystem.dto.exercicio;
+package com.david.academysystem.dto.exercicios;
 
-public record ExerciciosRequestDTO() {
+import jakarta.validation.constraints.NotBlank;
+
+public record ExerciciosRequestDTO(
+        @NotBlank(message = "O nome do exercicio não pode ser vazio.")
+        String nome,
+        @NotBlank(message = "O nome do grupo muscular do exercicio não pode ser vazio.")
+        String grupoMuscular
+) {
 }

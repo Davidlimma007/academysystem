@@ -1,4 +1,10 @@
-package com.david.academysystem.dto.exercicio;
+package com.david.academysystem.dto.exercicios;
 
-public record ExerciciosResponseDTO() {
+import java.util.UUID;
+
+public record ExerciciosResponseDTO(
+        UUID id,
+        String nome,
+        String grupoMuscular
+) {
 }
