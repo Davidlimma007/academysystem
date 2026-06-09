@@ -1,4 +1,9 @@
 package com.david.academysystem.database.repository;
 
-public interface IAlunoRepository {
+import com.david.academysystem.database.model.Aluno;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.UUID;
+
+public interface IAlunoRepository extends JpaRepository<Aluno, UUID> {
 }

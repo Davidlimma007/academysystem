@@ -1,4 +1,9 @@
 package com.david.academysystem.database.repository;
 
-public interface IAvaliacoesFisicasRepository {
+import com.david.academysystem.database.model.AvaliacoesFisicas;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.UUID;
+
+public interface IAvaliacoesFisicasRepository extends JpaRepository<AvaliacoesFisicas, UUID> {
 }

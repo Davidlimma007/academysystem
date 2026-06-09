@@ -1,4 +1,9 @@
 package com.david.academysystem.database.repository;
 
-public interface ITreinosRepository {
+import com.david.academysystem.database.model.Treinos;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.UUID;
+
+public interface ITreinosRepository extends JpaRepository<Treinos, UUID> {
 }
