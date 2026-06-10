@@ -23,10 +23,11 @@ public class Aluno {
     @Column(nullable = false)
     private String nome;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "avaliacao_fisica_id")
     private AvaliacoesFisicas avaliacoesFisicas;
 
-    @OneToMany(mappedBy = "aluno")
+    @Builder.Default
+    @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Treinos> treinos = new HashSet<>();
 }

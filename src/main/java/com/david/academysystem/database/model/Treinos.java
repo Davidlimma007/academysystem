@@ -27,6 +27,7 @@ public class Treinos {
     @JoinColumn(name = "aluno_id")
     private Aluno aluno;
 
+    @Builder.Default
     @ManyToMany
     @JoinTable(
             name = "treinos_exercicios",
