@@ -48,13 +48,13 @@ public class AuthenticationService {
                         .orElseGet(() -> roleRepository.save(Role.builder()
                                 .nome(RoleTypeEnum.ROLE_ALUNO.name()).build()));
 
-        usuarioRepository.save(Usuario.builder()
+        Usuario novoUsuario = usuarioRepository.save(Usuario.builder()
                 .email(dto.email())
                 .roles(Set.of(role))
                 .senha(passwordEncoder.encode(dto.senha()))
                 .build());
 
-        return new AuthResponseDTO(dto.email());
+        return new AuthResponseDTO(novoUsuario.getId(), dto.email());
     }
 
     @Transactional
@@ -70,13 +70,13 @@ public class AuthenticationService {
                 .orElseGet(() -> roleRepository.save(Role.builder()
                         .nome(RoleTypeEnum.ROLE_FUNCIONARIO.name()).build()));
 
-        usuarioRepository.save(Usuario.builder()
+        Usuario novoUsuario = usuarioRepository.save(Usuario.builder()
                 .email(dto.email())
                 .roles(Set.of(role))
                 .senha(passwordEncoder.encode(dto.senha()))
                 .build());
 
-        return new AuthResponseDTO(dto.email());
+        return new AuthResponseDTO(novoUsuario.getId(), dto.email());
     }
 
     @Transactional
@@ -92,13 +92,13 @@ public class AuthenticationService {
                 .orElseGet(() -> roleRepository.save(Role.builder()
                         .nome(RoleTypeEnum.ROLE_ADMIN.name()).build()));
 
-        usuarioRepository.save(Usuario.builder()
+        Usuario novoUsuario = usuarioRepository.save(Usuario.builder()
                 .email(dto.email())
                 .roles(Set.of(role))
                 .senha(passwordEncoder.encode(dto.senha()))
                 .build());
 
-        return new AuthResponseDTO(dto.email());
+        return new AuthResponseDTO(novoUsuario.getId(), dto.email());
     }
 
     public TokenResponseDTO login(LoginRequestDTO dto) throws Exception{

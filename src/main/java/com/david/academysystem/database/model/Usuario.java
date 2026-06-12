@@ -2,6 +2,7 @@ package com.david.academysystem.database.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,6 +26,7 @@ public class Usuario implements UserDetails {
     private String email;
 
     @Column(nullable = false)
+    @Length(min = 10, max = 100, message = "A senha deve conter entre (5) e (100) caracteres")
     private String senha;
 
     @ManyToMany(fetch = FetchType.EAGER)
