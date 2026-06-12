@@ -78,6 +78,10 @@ public class TreinoService {
         treinosRepository.deleteById(id);
     }
 
+    public boolean pertenceAoAluno(UUID treinoId, String email) {
+        return treinosRepository.existsByIdAndAlunoUsuarioEmail(treinoId, email);
+    }
+
     private Set<Exercicios> resolveExercicios(List<UUID> ids) {
         Set<Exercicios> exercicios = new HashSet<>();
         for (UUID exercicioId : ids) {

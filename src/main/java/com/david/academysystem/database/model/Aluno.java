@@ -30,4 +30,8 @@ public class Aluno {
     @Builder.Default
     @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Treinos> treinos = new HashSet<>();
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 }
