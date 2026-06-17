@@ -1,3 +1,35 @@
 spring:
-  application:
-    name: academysystem
+  output:
+    ansi:
+      enabled: ALWAYS
+      
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:academysystem}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        highlight_sql: true
+
+
+server:
+  port: ${SERVER_PORT:8080}
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+jwt:
+  expiration: ${JWT_EXPIRATION:9000000}
+  key: ${JWT_KEY:XZ81D1Nsg=HgfTjbc2i5G-Kf6RpxfQTibXktC2zqyaetBD4!b##HpcZatSGk-2q8MaIeJ7ybbop4PNz14OkF=Tzo4pDkR4PlXELxN4eOF6b9-MfVf5TPXuFQDR&aaqRHzWoLL=zpsoRacdz9uhe8Rm0c$j9#jsCn1_n$n7RngNHeEZ&w7XxP2DJLIrRk#V=JMfx_hx4nujQ6GSJ3DUKy_bKeR=WCkCj!CAe3Xyj!HDKa_&nAJYIKXk7ttpaF--nFJug5HFEgPXVpatKj#QkHiEkrkL4&Cw1YYRGBMezztcNB7Z8Bej_tU#UpK$Sj7S6vGCacLFHPkMuuo2yR_j!5$L9S}
