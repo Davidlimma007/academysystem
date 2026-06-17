@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
-public class GlobalExeptionHandler {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> handlerNotFoundException(NotFoundException ex) {
