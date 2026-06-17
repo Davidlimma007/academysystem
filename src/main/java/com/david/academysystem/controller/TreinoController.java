@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -64,6 +65,21 @@ public class TreinoController {
     @PreAuthorize("hasRole('FUNCIONARIO') or hasRole('ADMIN')")
     public ResponseEntity<List<TreinoResponseDTO>> findAll() {
         return ResponseEntity.ok(treinoService.findAll());
+    }
+
+    @Operation(summary = "Listar treinos paginado", description = "Retorna os treinos de forma paginada. Requer role FUNCIONARIO ou ADMIN.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Página retornada com sucesso"),
+            @ApiResponse(responseCode = "401", description = "Não autenticado",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Sem permissão",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @GetMapping("/page/{page}/size/{size}")
+    @PreAuthorize("hasRole('FUNCIONARIO') or hasRole('ADMIN')")
+    public ResponseEntity<Page<TreinoResponseDTO>> findAllPage(@PathVariable Integer page,
+                                                               @PathVariable Integer size) {
+        return ResponseEntity.ok(treinoService.findAllPage(page, size));
     }
 
     @Operation(summary = "Buscar treino por ID", description = "Retorna os dados de um treino específico. O aluno dono do treino pode acessá-lo; FUNCIONARIO e ADMIN têm acesso irrestrito.")

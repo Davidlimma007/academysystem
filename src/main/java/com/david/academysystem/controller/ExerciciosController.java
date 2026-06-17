@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -61,6 +62,20 @@ public class ExerciciosController {
     @GetMapping
     public ResponseEntity<List<ExerciciosResponseDTO>> findAll() {
         return ResponseEntity.ok(exerciciosService.findAll());
+    }
+
+    @Operation(summary = "Listar exercícios paginado", description = "Retorna os exercícios do catálogo de forma paginada. Requer role FUNCIONARIO ou ADMIN.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Página retornada com sucesso"),
+            @ApiResponse(responseCode = "401", description = "Não autenticado",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Sem permissão",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @GetMapping("/page/{page}/size/{size}")
+    public ResponseEntity<Page<ExerciciosResponseDTO>> findAllPage(@PathVariable Integer page,
+                                                                   @PathVariable Integer size) {
+        return ResponseEntity.ok(exerciciosService.findAllPage(page, size));
     }
 
     @Operation(summary = "Buscar exercício por ID", description = "Retorna os dados de um exercício específico. Requer role FUNCIONARIO ou ADMIN.")

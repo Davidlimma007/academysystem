@@ -9,6 +9,8 @@ import com.david.academysystem.dto.funcionario.FuncionarioResponseDTO;
 import com.david.academysystem.exception.BadRequestException;
 import com.david.academysystem.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +47,11 @@ public class FuncionarioService {
                 .stream()
                 .map(this::toResponseDTO)
                 .toList();
+    }
+
+    public Page<FuncionarioResponseDTO> findAllPage(Integer page, Integer size) {
+        return funcionarioRepository.findAll(PageRequest.of(page, size))
+                .map(this::toResponseDTO);
     }
 
     public FuncionarioResponseDTO findById(UUID id) {

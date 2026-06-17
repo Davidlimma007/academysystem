@@ -12,6 +12,8 @@ import com.david.academysystem.dto.treino.TreinoResponseDTO;
 import com.david.academysystem.exception.BadRequestException;
 import com.david.academysystem.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,6 +54,11 @@ public class TreinoService {
                 .stream()
                 .map(this::toResponseDTO)
                 .toList();
+    }
+
+    public Page<TreinoResponseDTO> findAllPage(Integer page, Integer size) {
+        return treinosRepository.findAll(PageRequest.of(page, size))
+                .map(this::toResponseDTO);
     }
 
     public TreinoResponseDTO findById(UUID id) {
