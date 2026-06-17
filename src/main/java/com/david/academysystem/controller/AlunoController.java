@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -65,6 +66,21 @@ public class AlunoController {
     @PreAuthorize("hasRole('FUNCIONARIO') or hasRole('ADMIN')")
     public ResponseEntity<List<AlunoResponseDTO>> findAll() {
         return ResponseEntity.ok(alunoService.listaGeral());
+    }
+
+    @Operation(summary = "Listar alunos paginado", description = "Retorna os alunos de forma paginada. Requer role FUNCIONARIO ou ADMIN.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Página retornada com sucesso"),
+            @ApiResponse(responseCode = "401", description = "Não autenticado",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Sem permissão",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @GetMapping("/page/{page}/size/{size}")
+    @PreAuthorize("hasRole('FUNCIONARIO') or hasRole('ADMIN')")
+    public ResponseEntity<Page<AlunoResponseDTO>> findAllPage(@PathVariable Integer page,
+                                                              @PathVariable Integer size) {
+        return ResponseEntity.ok(alunoService.listaGeralPage(page, size));
     }
 
     @Operation(summary = "Buscar aluno por ID", description = "Retorna os dados de um aluno específico. O próprio aluno pode acessar seus dados; FUNCIONARIO e ADMIN têm acesso irrestrito.")

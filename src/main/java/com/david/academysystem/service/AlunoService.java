@@ -11,6 +11,8 @@ import com.david.academysystem.dto.valiacoesfisicas.AvaliacoesFisicasResponseDTO
 import com.david.academysystem.exception.BadRequestException;
 import com.david.academysystem.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +49,11 @@ public class AlunoService {
                 .stream()
                 .map(this::toResponseDTO)
                 .toList();
+    }
+
+    public Page<AlunoResponseDTO> listaGeralPage(Integer page, Integer size) {
+        return alunoRepository.findAll(PageRequest.of(page, size))
+                .map(this::toResponseDTO);
     }
 
     public AlunoResponseDTO findById(UUID id) {

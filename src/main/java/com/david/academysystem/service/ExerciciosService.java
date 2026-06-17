@@ -6,6 +6,8 @@ import com.david.academysystem.dto.exercicios.ExerciciosRequestDTO;
 import com.david.academysystem.dto.exercicios.ExerciciosResponseDTO;
 import com.david.academysystem.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +35,11 @@ public class ExerciciosService {
                 .stream()
                 .map(this::toResponseDTO)
                 .toList();
+    }
+
+    public Page<ExerciciosResponseDTO> findAllPage(Integer page, Integer size) {
+        return exerciciosRepository.findAll(PageRequest.of(page, size))
+                .map(this::toResponseDTO);
     }
 
     public ExerciciosResponseDTO findById(UUID id) {
