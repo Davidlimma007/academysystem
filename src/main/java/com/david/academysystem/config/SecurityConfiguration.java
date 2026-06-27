@@ -37,6 +37,11 @@ public class SecurityConfiguration {
                         }))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers(
+                                "/",
+                                "/index.html",
+                                "/css/**",
+                                "/js/**",
+                                "/favicon.ico",
                                 "/v1/auth/**",
                                 "/error",
                                 "/swagger-ui/**",
