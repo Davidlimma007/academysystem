@@ -1,10 +1,13 @@
 package com.david.academysystem.service;
 
 import com.david.academysystem.config.TokenProvider;
+import com.david.academysystem.database.model.Aluno;
 import com.david.academysystem.database.model.Role;
 import com.david.academysystem.database.model.Usuario;
+import com.david.academysystem.database.repository.IAlunoRepository;
 import com.david.academysystem.database.repository.IRoleRepository;
 import com.david.academysystem.database.repository.IUsuarioRepository;
+import com.david.academysystem.dto.auth.cadastro.AuthAlunoRequestDTO;
 import com.david.academysystem.dto.auth.cadastro.AuthRequestDTO;
 import com.david.academysystem.dto.auth.cadastro.AuthResponseDTO;
 import com.david.academysystem.dto.auth.login.LoginRequestDTO;
@@ -29,6 +32,7 @@ public class AuthenticationService {
 
     private final IUsuarioRepository usuarioRepository;
     private final IRoleRepository roleRepository;
+    private final IAlunoRepository alunoRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
@@ -36,11 +40,8 @@ public class AuthenticationService {
     private long expirationTime;
 
     @Transactional
-    public AuthResponseDTO registroAluno(AuthRequestDTO dto) throws BadRequestException{
-        Usuario usuario = usuarioRepository.findByEmail(dto.email())
-                .orElse(null);
-
-        if(usuario != null){
+    public AuthResponseDTO registroAluno(AuthAlunoRequestDTO dto) throws BadRequestException{
+        if (usuarioRepository.findByEmail(dto.email()).isPresent()) {
             throw new BadRequestException("Aluno já cadastrado com este e-mail.");
         }
 
@@ -52,6 +53,11 @@ public class AuthenticationService {
                 .email(dto.email())
                 .roles(Set.of(role))
                 .senha(passwordEncoder.encode(dto.senha()))
+                .build());
+
+        alunoRepository.save(Aluno.builder()
+                .nome(dto.nome())
+                .usuario(novoUsuario)
                 .build());
 
         return new AuthResponseDTO(novoUsuario.getId(), dto.email());
