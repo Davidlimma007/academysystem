@@ -62,6 +62,12 @@ public class AlunoService {
         return toResponseDTO(aluno);
     }
 
+    public AlunoResponseDTO findByEmail(String email) {
+        Aluno aluno = alunoRepository.findByUsuarioEmail(email)
+                .orElseThrow(() -> new NotFoundException("Perfil de aluno não encontrado."));
+        return toResponseDTO(aluno);
+    }
+
     @Transactional
     public AlunoResponseDTO update(UUID id, AlunoRequestDTO dto) {
         Aluno aluno = alunoRepository.findById(id)

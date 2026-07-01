@@ -5,11 +5,13 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class TokenProvider {
@@ -22,15 +24,19 @@ public class TokenProvider {
 
     public String gerarToken(Authentication authentication){
         UserDetails user = (UserDetails) authentication.getPrincipal();
-        return buildToken(user.getUsername());
+        List<String> roles = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+        return buildToken(user.getUsername(), roles);
     }
 
-    private String buildToken (String username){
+    private String buildToken(String username, List<String> roles){
         Date now = new Date();
         Date expiration = new Date(now.getTime() + expirationTime);
 
         return Jwts.builder()
                 .subject(username)
+                .claim("roles", roles)
                 .issuedAt(now)
                 .expiration(expiration)
                 .signWith(getSigningKey())

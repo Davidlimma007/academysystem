@@ -1,5 +1,6 @@
 package com.david.academysystem.controller;
 
+import com.david.academysystem.dto.auth.cadastro.AuthAlunoRequestDTO;
 import com.david.academysystem.dto.auth.cadastro.AuthRequestDTO;
 import com.david.academysystem.dto.auth.cadastro.AuthResponseDTO;
 import com.david.academysystem.dto.auth.login.LoginRequestDTO;
@@ -44,7 +45,7 @@ public class AuthController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/register/aluno")
-    public ResponseEntity<AuthResponseDTO> registerAluno(@RequestBody @Valid AuthRequestDTO dto) throws BadRequestException {
+    public ResponseEntity<AuthResponseDTO> registerAluno(@RequestBody @Valid AuthAlunoRequestDTO dto) throws BadRequestException {
         return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.registroAluno(dto));
     }
 

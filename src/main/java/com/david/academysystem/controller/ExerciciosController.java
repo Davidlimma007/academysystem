@@ -28,7 +28,6 @@ import java.util.UUID;
 @RequestMapping("v1/exercicios")
 @RequiredArgsConstructor
 @Validated
-@PreAuthorize("hasRole('FUNCIONARIO') or hasRole('ADMIN')")
 @Tag(name = "Exercícios", description = "Gerenciamento do catálogo de exercícios")
 @SecurityRequirement(name = "jwt_auth")
 public class ExerciciosController {
@@ -47,6 +46,7 @@ public class ExerciciosController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping
+    @PreAuthorize("hasRole('FUNCIONARIO') or hasRole('ADMIN')")
     public ResponseEntity<ExerciciosResponseDTO> save(@Valid @RequestBody ExerciciosRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(exerciciosService.save(dto));
     }
@@ -60,6 +60,7 @@ public class ExerciciosController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping
+    @PreAuthorize("hasRole('FUNCIONARIO') or hasRole('ADMIN') or hasRole('ALUNO')")
     public ResponseEntity<List<ExerciciosResponseDTO>> findAll() {
         return ResponseEntity.ok(exerciciosService.findAll());
     }
@@ -73,6 +74,7 @@ public class ExerciciosController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping("/page/{page}/size/{size}")
+    @PreAuthorize("hasRole('FUNCIONARIO') or hasRole('ADMIN') or hasRole('ALUNO')")
     public ResponseEntity<Page<ExerciciosResponseDTO>> findAllPage(@PathVariable Integer page,
                                                                    @PathVariable Integer size) {
         return ResponseEntity.ok(exerciciosService.findAllPage(page, size));
@@ -90,6 +92,7 @@ public class ExerciciosController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('FUNCIONARIO') or hasRole('ADMIN') or hasRole('ALUNO')")
     public ResponseEntity<ExerciciosResponseDTO> findById(@PathVariable UUID id) {
         return ResponseEntity.ok(exerciciosService.findById(id));
     }
@@ -103,6 +106,7 @@ public class ExerciciosController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping("/grupos/{grupoMuscular}")
+    @PreAuthorize("hasRole('FUNCIONARIO') or hasRole('ADMIN') or hasRole('ALUNO')")
     public ResponseEntity<List<ExerciciosResponseDTO>> getByGrupoMuscular(@PathVariable String grupoMuscular) {
         return ResponseEntity.ok(exerciciosService.getExercicioByGrupoMuscular(grupoMuscular));
     }
@@ -121,6 +125,7 @@ public class ExerciciosController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('FUNCIONARIO') or hasRole('ADMIN')")
     public ResponseEntity<ExerciciosResponseDTO> update(@PathVariable UUID id,
                                                         @Valid @RequestBody ExerciciosRequestDTO dto) {
         return ResponseEntity.ok(exerciciosService.update(id, dto));
@@ -137,6 +142,7 @@ public class ExerciciosController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class)))
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('FUNCIONARIO') or hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable UUID id) {
         exerciciosService.delete(id);

@@ -7,6 +7,7 @@ import com.david.academysystem.database.repository.IAlunoRepository;
 import com.david.academysystem.database.repository.IExerciciosRepository;
 import com.david.academysystem.database.repository.ITreinosRepository;
 import com.david.academysystem.dto.exercicios.ExerciciosResponseDTO;
+import com.david.academysystem.dto.treino.TreinoAlunoRequestDTO;
 import com.david.academysystem.dto.treino.TreinoRequestDTO;
 import com.david.academysystem.dto.treino.TreinoResponseDTO;
 import com.david.academysystem.exception.BadRequestException;
@@ -83,6 +84,32 @@ public class TreinoService {
             throw new NotFoundException("Treino não encontrado.");
         }
         treinosRepository.deleteById(id);
+    }
+
+    public List<TreinoResponseDTO> findByAlunoEmail(String email) {
+        return treinosRepository.findAllByAlunoUsuarioEmail(email)
+                .stream()
+                .map(this::toResponseDTO)
+                .toList();
+    }
+
+    @Transactional
+    public TreinoResponseDTO criarTreinoPorAluno(TreinoAlunoRequestDTO dto, String email) {
+        Aluno aluno = alunoRepository.findByUsuarioEmail(email)
+                .orElseThrow(() -> new NotFoundException("Perfil de aluno não encontrado."));
+
+        if (treinosRepository.findByNomeAndAlunoId(dto.nome(), aluno.getId()).isPresent()) {
+            throw new BadRequestException("Treino já existente para este aluno.");
+        }
+
+        Treinos treino = Treinos.builder()
+                .nome(dto.nome())
+                .aluno(aluno)
+                .exercicios(resolveExercicios(dto.exerciciosIds()))
+                .build();
+
+        treinosRepository.save(treino);
+        return toResponseDTO(treino);
     }
 
     public boolean pertenceAoAluno(UUID treinoId, String email) {

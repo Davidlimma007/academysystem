@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,6 +53,13 @@ public class AlunoController {
     @PreAuthorize("hasRole('FUNCIONARIO') or hasRole('ADMIN')")
     public ResponseEntity<AlunoResponseDTO> criarAluno(@Valid @RequestBody AlunoRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(alunoService.criarAluno(dto));
+    }
+
+    @Operation(summary = "Meu perfil de aluno", description = "Retorna o perfil do aluno autenticado.")
+    @GetMapping("/me")
+    @PreAuthorize("hasRole('ALUNO')")
+    public ResponseEntity<AlunoResponseDTO> findMe(Authentication authentication) {
+        return ResponseEntity.ok(alunoService.findByEmail(authentication.getName()));
     }
 
     @Operation(summary = "Listar alunos", description = "Retorna a lista de todos os alunos cadastrados. Requer role FUNCIONARIO ou ADMIN.")

@@ -1,5 +1,6 @@
 package com.david.academysystem.controller;
 
+import com.david.academysystem.dto.treino.TreinoAlunoRequestDTO;
 import com.david.academysystem.dto.treino.TreinoRequestDTO;
 import com.david.academysystem.dto.treino.TreinoResponseDTO;
 import com.david.academysystem.exception.ErrorResponse;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,6 +53,22 @@ public class TreinoController {
     @PreAuthorize("hasRole('FUNCIONARIO') or hasRole('ADMIN')")
     public ResponseEntity<TreinoResponseDTO> criarTreino(@Valid @RequestBody TreinoRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(treinoService.criarTreino(dto));
+    }
+
+    @Operation(summary = "Listar meus treinos", description = "Retorna os treinos do aluno autenticado.")
+    @GetMapping("/meus")
+    @PreAuthorize("hasRole('ALUNO')")
+    public ResponseEntity<List<TreinoResponseDTO>> findMeus(Authentication authentication) {
+        return ResponseEntity.ok(treinoService.findByAlunoEmail(authentication.getName()));
+    }
+
+    @Operation(summary = "Criar meu treino", description = "Cria um treino para o aluno autenticado.")
+    @PostMapping("/meus")
+    @PreAuthorize("hasRole('ALUNO')")
+    public ResponseEntity<TreinoResponseDTO> criarMeuTreino(@Valid @RequestBody TreinoAlunoRequestDTO dto,
+                                                             Authentication authentication) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(treinoService.criarTreinoPorAluno(dto, authentication.getName()));
     }
 
     @Operation(summary = "Listar treinos", description = "Retorna a lista de todos os treinos cadastrados. Requer role FUNCIONARIO ou ADMIN.")
